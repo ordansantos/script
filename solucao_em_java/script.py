@@ -1,6 +1,6 @@
 
 # Universidade Federal de Campina Grande
-# Script_CPP
+# Script_Java
 # Author: Ordan Santos
 # Coloque as 'pastas com os input/output' e 'seus codigos' na 'mesma pasta do script'
 # Adicione o nome dos problemas como parametro da funcao 'pontos' (veja as ultimas linhas)
