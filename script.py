@@ -2,9 +2,24 @@
 
 
 from lib import *
+import os
 
-p = Problem.getProblems()[1]
+problems = Problem.getProblems()
+resumo = ""
 
-c = Correcao.corrigir (p, "ordan")
-print c[0]
-print c[1] 
+for aluno in os.listdir("alunos"):
+	print "Aluno: " + aluno
+	resumo = resumo + aluno + ": "
+	total = 0
+	for problem in problems:
+		c = Correcao.corrigir (problem, aluno)
+		total += c[0]
+		print c[1] + '\n'
+	print "Total: " + str(total) + '\n'
+	resumo = resumo + str(total) + "\n"
+	print ''
+	
+print "\t\n"
+
+print resumo	
+

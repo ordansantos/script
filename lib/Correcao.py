@@ -18,7 +18,7 @@ class Command(object):
 
     def run(self, timeout):
         def target():
-            self.process = subprocess.Popen(self.cmd, shell=True, preexec_fn=os.setsid)
+            self.process = subprocess.Popen(self.cmd, shell=True, preexec_fn=os.setsid, stdout=FNULL, stderr=subprocess.STDOUT)
             self.process.communicate()
 
         thread = threading.Thread(target=target)
@@ -54,8 +54,6 @@ def diff (file1, file2):
 	txt1 = open (file1).read().strip();
 	txt2 = open (file2).read().strip();
 	return txt1 == txt2
-
-
 
 def clear (problema):
 	if os.path.isfile (problema):
@@ -128,10 +126,9 @@ def corrigir (problema, aluno):
 				runtime = True
 				saida = saida + "R"
 				
-			if code != 0: 
+			if code != 0 and code != -15 and code != 139: 
 				passou_teste = False
 				saida = saida + "?"
-				
 		
 		
 		if passou_teste and not tle and not runtime: 
