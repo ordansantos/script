@@ -43,7 +43,7 @@ class Problem:
 		
 
 def getProblems():
-
+	
 	if os.path.isdir('problemas') == False:
 		raise Exception ('Pasta com os problemas nao encontrado')
 		

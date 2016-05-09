@@ -4,38 +4,55 @@
 from lib import *
 import os
 
-f = open ('resultados.txt', 'w')
+linguagens = ['.cpp', '.py', '.java', '.c', '.pas']
 
-problems = Problem.getProblems()
-resumo = ""
-
-for aluno in os.listdir("alunos"):
+try:
+	f = open ('resultados.txt', 'w')
 	
-	print "Aluno: " + aluno
-	f.write ("Aluno: " + aluno + '\n')
+	print "\ntestando estrutura dos problemas...",
+	problems = Problem.getProblems()
+	print "\tok"
 	
-	resumo = resumo + aluno + ": "
-	total = 0
-	for problem in problems:
-		c = Correcao.corrigir (problem, aluno)
-		total += c[0]
+	print "testando nome dos arquivos...",
+	FilesChecker.check(problems, linguagens)	
+	print "\tok"
+	
+	print "iniciando correcao dos alunos...\n\n"
+	
+	resumo = []
+	
+	for aluno in os.listdir("alunos"):
 		
-		print c[1] + '\n'
-		f.write (c[1] + '\n\n')
+		print "Aluno: " + aluno
+		f.write ("Aluno: " + aluno + '\n')
+		
+		total = 0
+		
+		for problem in problems:
+			c = Correcao.corrigir (problem, aluno)
+			total += c[0]
+			
+			print c[1] + '\n'
+			f.write (c[1] + '\n\n')
+		
+		print "Total: " + str(total) + '\n'
+		f.write ("Total: " + str(total) + '\n\n')
+		
+		resumo.append ((total, aluno))
+		
+		print '------------------------------------------------'
+		f.write ('------------------------------------------------\n')
 	
-	print "Total: " + str(total) + '\n'
-	f.write ("Total: " + str(total) + '\n\n')
+	resumo.sort(reverse=True)
 	
-	resumo = resumo + str(total) + "\n"
-	
-	print ''
+	for r in resumo:
+		print "%6.2f %s" % r	
+		f.write ("%6.2f %s\n" % r)
+
+	print "\n"
 	f.write ('\n')
 	
-print "\n"
-f.write ('\n')
-
-print resumo	
-f.write (resumo)
-
-f.close()
+	f.close()
+except Exception as e:
+	print "\n\tERRO " + str(e) + '\n'
 

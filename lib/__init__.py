@@ -1,1 +1,1 @@
-__all__ = ["Problem", "Correcao"]
+__all__ = ["Problem", "Correcao", "FilesChecker"]
