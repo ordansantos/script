@@ -68,6 +68,42 @@ def clear (problema):
 		
 	if os.path.isfile ("out"):
 		os.remove ("out")
+		
+	if os.path.isfile ("out_p3"):
+		os.remove ("out_p3")
+
+def runPython (caso, src):
+	
+	command_p2 = Command("python " + src + ".py" + "< " + caso[0] + " > out")
+	code_p2 = command_p2.run(timeout=1)
+	
+	command_p3 = Command("python3 " + src + ".py" + "< " + caso[0] + " > out_p3")
+	code_p3 = command_p3.run(timeout=1)
+	
+	if code_p2 != 0 and code_p3 != 0:
+		return (False, code_p2)
+	
+	if code_p2 == 0:
+		if diff(caso[1], 'out') == True: 
+			return (True, 0)
+	
+	if code_p3 == 0:
+		if diff(caso[1], 'out_p3') == True:
+			return (True, 0)
+					
+	return (False, 0)
+	
+def run (caso, command):
+	
+	code = command.run(timeout=1)
+				
+	if code == 0:
+		if (diff(caso[1], 'out') == False): 
+			return (False, 0)
+		else:
+			return (True, 0)
+	
+	return (False, code)
 
 def corrigir (problema, aluno):
 	
@@ -110,33 +146,35 @@ def corrigir (problema, aluno):
 		
 		for caso in problema.getCasosDoTeste(i):
 			
-			command = ""
+			out = (0, 0)
 			
 			if lang == 'cpp' or lang == 'c' or lang == 'pas':	
-				command = Command("./" + problema.getName() + " < " + caso[0] + " > out")
+				out = run (caso, Command("./" + problema.getName() + " < " + caso[0] + " > out"))
 			
 			if lang == 'py':
-				command = Command("python " + src + ".py" + "< " + caso[0] + " > out")
-			
+				out = runPython (caso, src)
+				
 			if lang == 'java':
-				command = Command("java " + problema.getName() + " < " + caso[0] + " > out")
+				out = run (caso, Command("java " + problema.getName() + " < " + caso[0] + " > out"))
+				
+			passou_subteste = out[0]
+			code = out[1]
 			
-			code = command.run(timeout=3)
-
-			if code == 0:
-				if (diff(caso[1], 'out') == False): 
-					passou_teste = False
-					saida = saida + "X"
-				else:
-					saida = saida + "."
-					
-			if code != 0: passou_teste = False
-					
-			if code == -15: saida = saida + "T"
+			if passou_subteste:
 				
-			if code == 139 or code == 1: saida = saida + "R"
+				saida = saida + "."
 				
-			if code != 0 and code != -15 and code != 139 and code != 1: saida = saida + "?"
+			else:
+				
+				passou_teste = False
+				
+				if code == 0: saida = saida + "X"
+						
+				if code == -15: saida = saida + "T"
+					
+				if code == 139 or code == 1: saida = saida + "R"
+					
+				if code != 0 and code != -15 and code != 139 and code != 1: saida = saida + "?"
 				
 		if passou_teste: pontos += 1
 		
