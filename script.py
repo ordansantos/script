@@ -45,9 +45,12 @@ try:
 	
 	resumo.sort(reverse=True)
 	
+	k = 1;
+	
 	for r in resumo:
-		print "%6.2f %s" % r	
-		f.write ("%6.2f %s\n" % r)
+		print " %2d\t%6.2f %s" % (k, r[0], r[1])	
+		f.write (" %2d\t%6.2f %s\n" % (k, r[0], r[1]))
+		k += 1
 
 	print "\n"
 	f.write ('\n')
