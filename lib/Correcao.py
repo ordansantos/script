@@ -8,7 +8,7 @@ import subprocess
 import subprocess, threading
 FNULL = open(os.devnull, 'w')
 
-linguagens = ['cpp', 'py', 'java']
+linguagens = ['cpp', 'py', 'java', 'c', 'pas']
 
 class Command(object):
 	
@@ -43,6 +43,10 @@ def getLanguage (aluno, nome_problema):
 		return "java"
 	if os.path.isfile (problema + '.cpp'):
 		return "cpp"
+	if os.path.isfile (problema + '.c'):
+		return "c"
+	if os.path.isfile (problema + '.pas'):
+		return "pas"
 		
 	for arquivo in os.listdir('alunos/' + aluno):
 		if nome_problema in arquivo:
@@ -76,13 +80,23 @@ def corrigir (problema, aluno):
 	
 	src = "alunos/" + aluno + "/" + problema.getName()
 	compilation_code = 0
-	
+
 	if lang == 'cpp':
-		compilation_code = subprocess.call(["g++", src + ".cpp", "-o", problema.getName()], stdout=FNULL, stderr=subprocess.STDOUT)
+		compilation_code = subprocess.call(["g++", "-g", "-O2", "-std=gnu++11", "-static", src + ".cpp", "-o", problema.getName()], stdout=FNULL, stderr=subprocess.STDOUT)
+	
+	if lang == 'c':
+		compilation_code = subprocess.call(["gcc", "-g", "-O2", "-std=gnu99", "-static", src + ".c", "-lm", "-o", problema.getName()], stdout=FNULL, stderr=subprocess.STDOUT)
 	
 	if lang == 'java':
 		compilation_code = subprocess.call(["javac", "-d", "./", src + ".java"], stdout=FNULL, stderr=subprocess.STDOUT)
-	
+		
+	if lang == 'pas':
+		compilation_code = subprocess.call(["pc", src + ".pas"], stdout=FNULL, stderr=subprocess.STDOUT)
+		if os.path.isfile (src):
+			os.rename (src, "./" + problema.getName())
+		if os.path.isfile (src + ".o"):
+			os.remove (src + ".o")
+		
 	if compilation_code != 0:
 		return (0, saida + "Erro de compilacao")
 	
@@ -100,7 +114,7 @@ def corrigir (problema, aluno):
 			
 			command = ""
 			
-			if lang == 'cpp':	
+			if lang == 'cpp' or lang == 'c' or lang == 'pas':	
 				command = Command("./" + problema.getName() + " < " + caso[0] + " > out")
 			
 			if lang == 'py':
