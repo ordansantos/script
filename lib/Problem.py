@@ -44,12 +44,12 @@ class Problem:
 
 def getProblems():
 
-	if os.path.isdir('problems') == False:
+	if os.path.isdir('problemas') == False:
 		raise Exception ('Pasta com os problemas nao encontrado')
 		
 	problems = []
 	
-	for problem in os.listdir("problems/"):
-		problems.append (Problem (problem, 'problems/' + problem))
+	for problem in os.listdir("problemas/"):
+		problems.append (Problem (problem, 'problemas/' + problem))
 	
 	return problems

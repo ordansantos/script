@@ -105,8 +105,6 @@ def corrigir (problema, aluno):
 	for i in range (problema.getNumberOfTests()):
 		
 		passou_teste = True
-		tle = False
-		runtime = False
 		
 		saida = saida + 'caso: ' + "%2d" % (i + 1) + ': '
 		
@@ -132,21 +130,15 @@ def corrigir (problema, aluno):
 				else:
 					saida = saida + "."
 					
-			if code == -15: 
-				tle = True
-				saida = saida + "T"
+			if code != 0: passou_teste = False
+					
+			if code == -15: saida = saida + "T"
 				
-			if code == 139: 
-				runtime = True
-				saida = saida + "R"
+			if code == 139 or code == 1: saida = saida + "R"
 				
-			if code != 0 and code != -15 and code != 139: 
-				passou_teste = False
-				saida = saida + "?"
-		
-		
-		if passou_teste and not tle and not runtime: 
-			pontos += 1
+			if code != 0 and code != -15 and code != 139 and code != 1: saida = saida + "?"
+				
+		if passou_teste: pontos += 1
 		
 		saida = saida + '\n'
 
