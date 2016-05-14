@@ -14,8 +14,10 @@ try:
 	print "\tok"
 	
 	print "testando nome dos arquivos...",
-	FilesChecker.check(problems, linguagens)	
-	print "\tok"
+	flag = FilesChecker.check(problems, linguagens)	
+	
+	if flag == False:	
+		print "\tok"
 	
 	print "iniciando correcao dos alunos...\n\n"
 	
@@ -58,4 +60,3 @@ try:
 	f.close()
 except Exception as e:
 	print "\n\tERRO " + str(e) + '\n'
-
